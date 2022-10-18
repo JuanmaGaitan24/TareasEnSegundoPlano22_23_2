@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
-    Button buttonStart, buttonStop, buttonStart2, buttonStop2;
+    Button buttonStart, buttonStop, buttonStart2, buttonStop2, btncuentaatras;
+    ProgressBar barcuentaatras;
     TextView textViewCrono, textViewCrono2;
     int contador=0;
     Thread hilo=null;
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         buttonStart2 = findViewById(R.id.buttonStart2);
         buttonStop2 = findViewById(R.id.buttonStop2);
         textViewCrono2 = findViewById(R.id.textViewCrono2);
+        btncuentaatras = findViewById(R.id.buttoncuentaatras);
+        barcuentaatras = findViewById(R.id.progressBaratras);
 
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +94,44 @@ public class MainActivity extends AppCompatActivity {
                 crono2ON = false;
             }
         });
+
+        btncuentaatras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CuentasAtras cuentasAtras = new CuentasAtras();
+                cuentasAtras.execute();
+            }
+        });
+
+    }
+
+
+
+    private class CuentasAtras extends AsyncTask<String, String, String>{
+
+        int valor = barcuentaatras.getProgress();
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            barcuentaatras.setProgress(valor);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            while (valor > 0){
+
+                valor--;
+
+                try {
+                    Thread.sleep(200);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
     }
 
     private class MiCronometro extends AsyncTask<String, String, String>{
